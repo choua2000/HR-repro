@@ -27,7 +27,7 @@ app.use('/api/employment-histories', employmentHistoryRoutes);
 app.use('/api/references', referenceRoutes);
 app.use('/api/applications', applicationRoutes);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 // Sync database and start server
 syncDatabase().then(() => {

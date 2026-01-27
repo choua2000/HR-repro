@@ -7,6 +7,7 @@ const Application = sequelize.define("Application", {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
     },
+
     apply_date: {
         type: DataTypes.DATEONLY,
         allowNull: true,

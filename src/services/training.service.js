@@ -1,4 +1,4 @@
-import { Training } from "../models/index.js";
+import { Candidate, Training } from "../models/index.js";
 
 class TrainingService {
     // Create training record
@@ -10,6 +10,13 @@ class TrainingService {
     async findAll() {
         return await Training.findAll({
             order: [["createdAt", "DESC"]],
+            include: [
+                {
+                    model: Candidate,
+                    as: "candidate",
+                    attributes: ["id", "name_surname", "date_of_birth"],
+                },
+            ],
         });
     }
 
