@@ -1,23 +1,22 @@
 // config/db.js
-import pkg from "pg";
-const { Pool } = pkg;
+import { Sequelize } from "sequelize";
 
-const pool = new Pool({
-  user: "postgres",
+const sequelize = new Sequelize("hr_db", "postgres", "chouavang", {
   host: "localhost",
-  database: "hr_db",
-  password: "chouavang",
-  port: 5432,
+  dialect: "postgres",
+  logging: false,
 });
 
 // Test the connection immediately
-pool.connect()
-  .then(client => {
+sequelize
+  .authenticate()
+  .then(() => {
     console.log("Database connected successfully");
-    client.release(); // release the client back to the pool
   })
-  .catch(err => {
+  .then(() => {
+    sequelize.sync();
+  })
+  .catch((err) => {
     console.error("Database connection error:", err.message);
   });
-
-export default pool;
+export default sequelize;
