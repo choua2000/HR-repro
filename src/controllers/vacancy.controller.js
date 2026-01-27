@@ -50,11 +50,13 @@ class VacancyController {
       }
 
       return res.status(200).json({
+        code:200,
         success: true,
         data: vacancy,
       });
     } catch (error) {
       return res.status(500).json({
+        code:500,
         success: false,
         message: error.message,
       });
@@ -75,6 +77,7 @@ class VacancyController {
       }
 
       return res.status(200).json({
+        code:200,
         success: true,
         message: "Vacancy updated successfully",
         data: vacancy,
@@ -101,11 +104,13 @@ class VacancyController {
       }
 
       return res.status(200).json({
+        code:200,
         success: true,
         message: "Vacancy deleted successfully",
       });
     } catch (error) {
       return res.status(500).json({
+        code:500,
         success: false,
         message: error.message,
       });
