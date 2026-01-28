@@ -1,14 +1,14 @@
-import trainingService from "../services/training.service.js";
+import applicationDocumentService from "../services/application_document.service.js";
 
-class TrainingController {
-    // POST /trainings
+class ApplicationDocumentController {
+    // POST /documents
     async create(req, res) {
         try {
-            const training = await trainingService.create(req.body);
+            const document = await applicationDocumentService.create(req.body);
             return res.status(201).json({
                 success: true,
-                message: "Training record created successfully",
-                data: training,
+                message: "Document uploaded successfully",
+                data: document,
             });
         } catch (error) {
             return res.status(500).json({
@@ -18,13 +18,13 @@ class TrainingController {
         }
     }
 
-    // GET /trainings
+    // GET /documents
     async findAll(req, res) {
         try {
-            const trainings = await trainingService.findAll();
+            const documents = await applicationDocumentService.findAll();
             return res.status(200).json({
                 success: true,
-                data: trainings,
+                data: documents,
             });
         } catch (error) {
             return res.status(500).json({
@@ -34,14 +34,14 @@ class TrainingController {
         }
     }
 
-    // GET /trainings/candidate/:candidateId
-    async findByCandidateId(req, res) {
+    // GET /documents/application/:applicationId
+    async findByApplicationId(req, res) {
         try {
-            const { candidateId } = req.params;
-            const trainings = await trainingService.findByCandidateId(candidateId);
+            const { applicationId } = req.params;
+            const documents = await applicationDocumentService.findByApplicationId(applicationId);
             return res.status(200).json({
                 success: true,
-                data: trainings,
+                data: documents,
             });
         } catch (error) {
             return res.status(500).json({
@@ -51,51 +51,48 @@ class TrainingController {
         }
     }
 
-    // GET /trainings/:id
+    // GET /documents/:id
     async findById(req, res) {
         try {
             const { id } = req.params;
-            const training = await trainingService.findById(id);
+            const document = await applicationDocumentService.findById(id);
 
-            if (!training) {
+            if (!document) {
                 return res.status(404).json({
                     success: false,
-                    message: "Training record not found",
+                    message: "Document not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                data: training,
+                data: document,
             });
         } catch (error) {
             return res.status(500).json({
-                code: 500,
                 success: false,
                 message: error.message,
             });
         }
     }
 
-    // PUT /trainings/:id
+    // PUT /documents/:id
     async update(req, res) {
         try {
             const { id } = req.params;
-            const training = await trainingService.update(id, req.body);
+            const document = await applicationDocumentService.update(id, req.body);
 
-            if (!training) {
+            if (!document) {
                 return res.status(404).json({
                     success: false,
-                    message: "Training record not found",
+                    message: "Document not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                message: "Training record updated successfully",
-                data: training,
+                message: "Document updated successfully",
+                data: document,
             });
         } catch (error) {
             return res.status(500).json({
@@ -105,27 +102,25 @@ class TrainingController {
         }
     }
 
-    // DELETE /trainings/:id
+    // DELETE /documents/:id
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const deleted = await trainingService.delete(id);
+            const deleted = await applicationDocumentService.delete(id);
 
             if (!deleted) {
                 return res.status(404).json({
                     success: false,
-                    message: "Training record not found",
+                    message: "Document not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                message: "Training record deleted successfully",
+                message: "Document deleted successfully",
             });
         } catch (error) {
             return res.status(500).json({
-                code: 500,
                 success: false,
                 message: error.message,
             });
@@ -133,4 +128,4 @@ class TrainingController {
     }
 }
 
-export default new TrainingController();
+export default new ApplicationDocumentController();

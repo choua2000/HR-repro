@@ -1,10 +1,10 @@
-import educationService from "../services/education.service.js";
+import applicantEducationService from "../services/applicant_education.service.js";
 
-class EducationController {
+class ApplicantEducationController {
     // POST /educations
     async create(req, res) {
         try {
-            const education = await educationService.create(req.body);
+            const education = await applicantEducationService.create(req.body);
             return res.status(201).json({
                 success: true,
                 message: "Education record created successfully",
@@ -21,7 +21,7 @@ class EducationController {
     // GET /educations
     async findAll(req, res) {
         try {
-            const educations = await educationService.findAll();
+            const educations = await applicantEducationService.findAll();
             return res.status(200).json({
                 success: true,
                 data: educations,
@@ -34,11 +34,11 @@ class EducationController {
         }
     }
 
-    // GET /educations/candidate/:candidateId
-    async findByCandidateId(req, res) {
+    // GET /educations/application/:applicationId
+    async findByApplicationId(req, res) {
         try {
-            const { candidateId } = req.params;
-            const educations = await educationService.findByCandidateId(candidateId);
+            const { applicationId } = req.params;
+            const educations = await applicantEducationService.findByApplicationId(applicationId);
             return res.status(200).json({
                 success: true,
                 data: educations,
@@ -55,7 +55,7 @@ class EducationController {
     async findById(req, res) {
         try {
             const { id } = req.params;
-            const education = await educationService.findById(id);
+            const education = await applicantEducationService.findById(id);
 
             if (!education) {
                 return res.status(404).json({
@@ -65,13 +65,11 @@ class EducationController {
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
                 data: education,
             });
         } catch (error) {
             return res.status(500).json({
-                code: 500,
                 success: false,
                 message: error.message,
             });
@@ -82,7 +80,7 @@ class EducationController {
     async update(req, res) {
         try {
             const { id } = req.params;
-            const education = await educationService.update(id, req.body);
+            const education = await applicantEducationService.update(id, req.body);
 
             if (!education) {
                 return res.status(404).json({
@@ -92,7 +90,6 @@ class EducationController {
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
                 message: "Education record updated successfully",
                 data: education,
@@ -109,7 +106,7 @@ class EducationController {
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const deleted = await educationService.delete(id);
+            const deleted = await applicantEducationService.delete(id);
 
             if (!deleted) {
                 return res.status(404).json({
@@ -119,13 +116,11 @@ class EducationController {
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
                 message: "Education record deleted successfully",
             });
         } catch (error) {
             return res.status(500).json({
-                code: 500,
                 success: false,
                 message: error.message,
             });
@@ -133,4 +128,4 @@ class EducationController {
     }
 }
 
-export default new EducationController();
+export default new ApplicantEducationController();

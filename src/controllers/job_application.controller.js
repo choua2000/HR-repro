@@ -1,14 +1,14 @@
-import candidateService from "../services/candidate.service.js";
+import jobApplicationService from "../services/job_application.service.js";
 
-class CandidateController {
-    // POST /candidates
+class JobApplicationController {
+    // POST /applications
     async create(req, res) {
         try {
-            const candidate = await candidateService.create(req.body);
+            const application = await jobApplicationService.create(req.body);
             return res.status(201).json({
                 success: true,
-                message: "Candidate created successfully",
-                data: candidate,
+                message: "Application submitted successfully",
+                data: application,
             });
         } catch (error) {
             return res.status(500).json({
@@ -18,13 +18,13 @@ class CandidateController {
         }
     }
 
-    // GET /candidates
+    // GET /applications
     async findAll(req, res) {
         try {
-            const candidates = await candidateService.findAll();
+            const applications = await jobApplicationService.findAll();
             return res.status(200).json({
                 success: true,
-                data: candidates,
+                data: applications,
             });
         } catch (error) {
             return res.status(500).json({
@@ -34,13 +34,14 @@ class CandidateController {
         }
     }
 
-    // GET /candidates/details
-    async findAllWithDetails(req, res) {
+    // GET /applications/job/:jobId
+    async findByJobId(req, res) {
         try {
-            const candidates = await candidateService.findAllWithDetails();
+            const { jobId } = req.params;
+            const applications = await jobApplicationService.findByJobId(jobId);
             return res.status(200).json({
                 success: true,
-                data: candidates,
+                data: applications,
             });
         } catch (error) {
             return res.status(500).json({
@@ -50,78 +51,48 @@ class CandidateController {
         }
     }
 
-    // GET /candidates/:id
+    // GET /applications/:id
     async findById(req, res) {
         try {
             const { id } = req.params;
-            const candidate = await candidateService.findById(id);
+            const application = await jobApplicationService.findById(id);
 
-            if (!candidate) {
+            if (!application) {
                 return res.status(404).json({
                     success: false,
-                    message: "Candidate not found",
+                    message: "Application not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                data: candidate,
+                data: application,
             });
         } catch (error) {
             return res.status(500).json({
-                code: 500,
                 success: false,
                 message: error.message,
             });
         }
     }
 
-    // GET /candidates/:id/details
-    async findByIdWithDetails(req, res) {
-        try {
-            const { id } = req.params;
-            const candidate = await candidateService.findByIdWithDetails(id);
-
-            if (!candidate) {
-                return res.status(404).json({
-                    success: false,
-                    message: "Candidate not found",
-                });
-            }
-
-            return res.status(200).json({
-                code: 200,
-                success: true,
-                data: candidate,
-            });
-        } catch (error) {
-            return res.status(500).json({
-                code: 500,
-                success: false,
-                message: error.message,
-            });
-        }
-    }
-
-    // PUT /candidates/:id
+    // PUT /applications/:id
     async update(req, res) {
         try {
             const { id } = req.params;
-            const candidate = await candidateService.update(id, req.body);
+            const application = await jobApplicationService.update(id, req.body);
 
-            if (!candidate) {
+            if (!application) {
                 return res.status(404).json({
                     success: false,
-                    message: "Candidate not found",
+                    message: "Application not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                message: "Candidate updated successfully",
-                data: candidate,
+                message: "Application updated successfully",
+                data: application,
             });
         } catch (error) {
             return res.status(500).json({
@@ -131,27 +102,60 @@ class CandidateController {
         }
     }
 
-    // DELETE /candidates/:id
+    // PATCH /applications/:id/status
+    async updateStatus(req, res) {
+        try {
+            const { id } = req.params;
+            const { status } = req.body;
+
+            if (!status) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Status is required",
+                });
+            }
+
+            const application = await jobApplicationService.updateStatus(id, status);
+
+            if (!application) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Application not found",
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Application status updated successfully",
+                data: application,
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    // DELETE /applications/:id
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const deleted = await candidateService.delete(id);
+            const deleted = await jobApplicationService.delete(id);
 
             if (!deleted) {
                 return res.status(404).json({
                     success: false,
-                    message: "Candidate not found",
+                    message: "Application not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                message: "Candidate deleted successfully",
+                message: "Application deleted successfully",
             });
         } catch (error) {
             return res.status(500).json({
-                code: 500,
                 success: false,
                 message: error.message,
             });
@@ -159,4 +163,4 @@ class CandidateController {
     }
 }
 
-export default new CandidateController();
+export default new JobApplicationController();

@@ -1,14 +1,14 @@
-import applicationService from "../services/application.service.js";
+import applicantTrainingService from "../services/applicant_training.service.js";
 
-class ApplicationController {
-    // POST /applications
+class ApplicantTrainingController {
+    // POST /trainings
     async create(req, res) {
         try {
-            const application = await applicationService.create(req.body);
+            const training = await applicantTrainingService.create(req.body);
             return res.status(201).json({
                 success: true,
-                message: "Application submitted successfully",
-                data: application,
+                message: "Training record created successfully",
+                data: training,
             });
         } catch (error) {
             return res.status(500).json({
@@ -18,13 +18,13 @@ class ApplicationController {
         }
     }
 
-    // GET /applications
+    // GET /trainings
     async findAll(req, res) {
         try {
-            const applications = await applicationService.findAll();
+            const trainings = await applicantTrainingService.findAll();
             return res.status(200).json({
                 success: true,
-                data: applications,
+                data: trainings,
             });
         } catch (error) {
             return res.status(500).json({
@@ -34,14 +34,14 @@ class ApplicationController {
         }
     }
 
-    // GET /applications/candidate/:candidateId
-    async findByCandidateId(req, res) {
+    // GET /trainings/application/:applicationId
+    async findByApplicationId(req, res) {
         try {
-            const { candidateId } = req.params;
-            const applications = await applicationService.findByCandidateId(candidateId);
+            const { applicationId } = req.params;
+            const trainings = await applicantTrainingService.findByApplicationId(applicationId);
             return res.status(200).json({
                 success: true,
-                data: applications,
+                data: trainings,
             });
         } catch (error) {
             return res.status(500).json({
@@ -51,68 +51,48 @@ class ApplicationController {
         }
     }
 
-    // GET /applications/vacancy/:vacancyId
-    async findByVacancyId(req, res) {
-        try {
-            const { vacancyId } = req.params;
-            const applications = await applicationService.findByVacancyId(vacancyId);
-            return res.status(200).json({
-                success: true,
-                data: applications,
-            });
-        } catch (error) {
-            return res.status(500).json({
-                success: false,
-                message: error.message,
-            });
-        }
-    }
-
-    // GET /applications/:id
+    // GET /trainings/:id
     async findById(req, res) {
         try {
             const { id } = req.params;
-            const application = await applicationService.findById(id);
+            const training = await applicantTrainingService.findById(id);
 
-            if (!application) {
+            if (!training) {
                 return res.status(404).json({
                     success: false,
-                    message: "Application not found",
+                    message: "Training record not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                data: application,
+                data: training,
             });
         } catch (error) {
             return res.status(500).json({
-                code: 500,
                 success: false,
                 message: error.message,
             });
         }
     }
 
-    // PUT /applications/:id
+    // PUT /trainings/:id
     async update(req, res) {
         try {
             const { id } = req.params;
-            const application = await applicationService.update(id, req.body);
+            const training = await applicantTrainingService.update(id, req.body);
 
-            if (!application) {
+            if (!training) {
                 return res.status(404).json({
                     success: false,
-                    message: "Application not found",
+                    message: "Training record not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                message: "Application updated successfully",
-                data: application,
+                message: "Training record updated successfully",
+                data: training,
             });
         } catch (error) {
             return res.status(500).json({
@@ -122,27 +102,25 @@ class ApplicationController {
         }
     }
 
-    // DELETE /applications/:id
+    // DELETE /trainings/:id
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const deleted = await applicationService.delete(id);
+            const deleted = await applicantTrainingService.delete(id);
 
             if (!deleted) {
                 return res.status(404).json({
                     success: false,
-                    message: "Application not found",
+                    message: "Training record not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                message: "Application deleted successfully",
+                message: "Training record deleted successfully",
             });
         } catch (error) {
             return res.status(500).json({
-                code: 500,
                 success: false,
                 message: error.message,
             });
@@ -150,4 +128,4 @@ class ApplicationController {
     }
 }
 
-export default new ApplicationController();
+export default new ApplicantTrainingController();

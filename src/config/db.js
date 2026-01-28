@@ -34,9 +34,13 @@ sequelize
   .then(() => {
     console.log("Database connected successfully");
   })
-  .then(() => {
-    sequelize.sync();
-  })
+  // .then(() => {
+  //   console.log("Syncing database");
+  //   return sequelize.sync({ force: true });
+  // })
+  // .then(() => {
+  //   console.log("Database synchronized successfully");
+  // })
   .catch((err) => {
     console.error("Database connection error:", err.message);
   });

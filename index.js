@@ -4,13 +4,12 @@ import cors from 'cors';
 import { syncDatabase } from './src/models/index.js';
 
 // Import routes
-import vacancyRoutes from './src/routes/vacancy.routes.js';
-import candidateRoutes from './src/routes/candidate.routes.js';
-import educationRoutes from './src/routes/education.routes.js';
-import trainingRoutes from './src/routes/training.routes.js';
-import employmentHistoryRoutes from './src/routes/employment_history.routes.js';
-import referenceRoutes from './src/routes/reference.routes.js';
-import applicationRoutes from './src/routes/application.routes.js';
+import jobRoutes from './src/routes/job.routes.js';
+import jobApplicationRoutes from './src/routes/job_application.routes.js';
+import applicantEducationRoutes from './src/routes/applicant_education.routes.js';
+import applicantTrainingRoutes from './src/routes/applicant_training.routes.js';
+import applicantWorkExperienceRoutes from './src/routes/applicant_work_experience.routes.js';
+import applicationDocumentRoutes from './src/routes/application_document.routes.js';
 
 const app = express();
 
@@ -19,19 +18,18 @@ app.use(cors());
 dotenv.config();
 
 // Register routes
-app.use('/api/vacancies', vacancyRoutes);
-app.use('/api/candidates', candidateRoutes);
-app.use('/api/educations', educationRoutes);
-app.use('/api/trainings', trainingRoutes);
-app.use('/api/employment-histories', employmentHistoryRoutes);
-app.use('/api/references', referenceRoutes);
-app.use('/api/applications', applicationRoutes);
+app.use('/api/jobs', jobRoutes);
+app.use('/api/applications', jobApplicationRoutes);
+app.use('/api/educations', applicantEducationRoutes);
+app.use('/api/trainings', applicantTrainingRoutes);
+app.use('/api/work-experiences', applicantWorkExperienceRoutes);
+app.use('/api/documents', applicationDocumentRoutes);
 
 const PORT = process.env.PORT;
 
 // Sync database and start server
 syncDatabase().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
 });

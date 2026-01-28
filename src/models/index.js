@@ -1,78 +1,74 @@
 import sequelize from "../config/db.js";
-import Vacancy from "./vacancy.model.js";
-import Candidate from "./candidate.model.js";
-import Education from "./education.model.js";
-import Training from "./training.model.js";
-import EmploymentHistory from "./employment_history.model.js";
-import Reference from "./reference.model.js";
-import Application from "./application.model.js";
+
+// Import all models
+import Job from "./job.model.js";
+import JobApplication from "./job_application.model.js";
+import ApplicantEducation from "./applicant_education.model.js";
+import ApplicantTraining from "./applicant_training.model.js";
+import ApplicantWorkExperience from "./applicant_work_experience.model.js";
+import ApplicationDocument from "./application_document.model.js";
 
 // ==========================================
 // ASSOCIATIONS / RELATIONSHIPS
 // ==========================================
 
-// Candidate has many Education records
-Candidate.hasMany(Education, {
-    foreignKey: "candidateId",
+// Job has many JobApplications
+Job.hasMany(JobApplication, {
+    foreignKey: "job_id",
+    as: "applications",
+    onDelete: "CASCADE",
+});
+JobApplication.belongsTo(Job, {
+    foreignKey: "job_id",
+    as: "job",
+});
+
+// JobApplication has many ApplicantEducations
+JobApplication.hasMany(ApplicantEducation, {
+    foreignKey: "application_id",
     as: "educations",
+    onDelete: "CASCADE",
 });
-Education.belongsTo(Candidate, {
-    foreignKey: "candidateId",
-    as: "candidate",
+ApplicantEducation.belongsTo(JobApplication, {
+    foreignKey: "application_id",
+    as: "application",
 });
 
-// Candidate has many Training records
-Candidate.hasMany(Training, {
-    foreignKey: "candidateId",
+// JobApplication has many ApplicantTrainings
+JobApplication.hasMany(ApplicantTraining, {
+    foreignKey: "application_id",
     as: "trainings",
+    onDelete: "CASCADE",
 });
-Training.belongsTo(Candidate, {
-    foreignKey: "candidateId",
-    as: "candidate",
-});
-
-// Candidate has many EmploymentHistory records
-Candidate.hasMany(EmploymentHistory, {
-    foreignKey: "candidateId",
-    as: "employmentHistories",
-});
-EmploymentHistory.belongsTo(Candidate, {
-    foreignKey: "candidateId",
-    as: "candidate",
+ApplicantTraining.belongsTo(JobApplication, {
+    foreignKey: "application_id",
+    as: "application",
 });
 
-// Candidate has many Reference records
-Candidate.hasMany(Reference, {
-    foreignKey: "candidateId",
-    as: "references",
+// JobApplication has many ApplicantWorkExperiences
+JobApplication.hasMany(ApplicantWorkExperience, {
+    foreignKey: "application_id",
+    as: "workExperiences",
+    onDelete: "CASCADE",
 });
-Reference.belongsTo(Candidate, {
-    foreignKey: "candidateId",
-    as: "candidate",
-});
-
-// Many-to-Many: Candidate <-> Vacancy through Application
-Candidate.belongsToMany(Vacancy, {
-    through: Application,
-    foreignKey: "candidateId",
-    otherKey: "vacancyId",
-    as: "appliedVacancies",
-});
-Vacancy.belongsToMany(Candidate, {
-    through: Application,
-    foreignKey: "vacancyId",
-    otherKey: "candidateId",
-    as: "applicants",
+ApplicantWorkExperience.belongsTo(JobApplication, {
+    foreignKey: "application_id",
+    as: "application",
 });
 
-// Direct associations for Application
-Application.belongsTo(Candidate, { foreignKey: "candidateId", as: "candidate" });
-Application.belongsTo(Vacancy, { foreignKey: "vacancyId", as: "vacancy" });
-Candidate.hasMany(Application, { foreignKey: "candidateId", as: "applications" });
-Vacancy.hasMany(Application, { foreignKey: "vacancyId", as: "applications" });
+// JobApplication has many ApplicationDocuments
+JobApplication.hasMany(ApplicationDocument, {
+    foreignKey: "application_id",
+    as: "documents",
+    onDelete: "CASCADE",
+});
+ApplicationDocument.belongsTo(JobApplication, {
+    foreignKey: "application_id",
+    as: "application",
+});
 
 // ==========================================
-// SYNC DATABASE
+// SYNC DATABASE (uncomment when needed)
 // ==========================================
 const syncDatabase = async () => {
     try {
@@ -85,12 +81,11 @@ const syncDatabase = async () => {
 
 export {
     sequelize,
-    Vacancy,
-    Candidate,
-    Education,
-    Training,
-    EmploymentHistory,
-    Reference,
-    Application,
+    Job,
+    JobApplication,
+    ApplicantEducation,
+    ApplicantTraining,
+    ApplicantWorkExperience,
+    ApplicationDocument,
     syncDatabase,
 };

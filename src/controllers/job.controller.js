@@ -1,14 +1,14 @@
-import referenceService from "../services/reference.service.js";
+import jobService from "../services/job.service.js";
 
-class ReferenceController {
-    // POST /references
+class JobController {
+    // POST /jobs
     async create(req, res) {
         try {
-            const reference = await referenceService.create(req.body);
+            const job = await jobService.create(req.body);
             return res.status(201).json({
                 success: true,
-                message: "Reference created successfully",
-                data: reference,
+                message: "Job created successfully",
+                data: job,
             });
         } catch (error) {
             return res.status(500).json({
@@ -18,13 +18,13 @@ class ReferenceController {
         }
     }
 
-    // GET /references
+    // GET /jobs
     async findAll(req, res) {
         try {
-            const references = await referenceService.findAll();
+            const jobs = await jobService.findAll();
             return res.status(200).json({
                 success: true,
-                data: references,
+                data: jobs,
             });
         } catch (error) {
             return res.status(500).json({
@@ -34,14 +34,13 @@ class ReferenceController {
         }
     }
 
-    // GET /references/candidate/:candidateId
-    async findByCandidateId(req, res) {
+    // GET /jobs/active
+    async findAllActive(req, res) {
         try {
-            const { candidateId } = req.params;
-            const references = await referenceService.findByCandidateId(candidateId);
+            const jobs = await jobService.findAllActive();
             return res.status(200).json({
                 success: true,
-                data: references,
+                data: jobs,
             });
         } catch (error) {
             return res.status(500).json({
@@ -51,51 +50,73 @@ class ReferenceController {
         }
     }
 
-    // GET /references/:id
+    // GET /jobs/:id
     async findById(req, res) {
         try {
             const { id } = req.params;
-            const reference = await referenceService.findById(id);
+            const job = await jobService.findById(id);
 
-            if (!reference) {
+            if (!job) {
                 return res.status(404).json({
                     success: false,
-                    message: "Reference not found",
+                    message: "Job not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                data: reference,
+                data: job,
             });
         } catch (error) {
             return res.status(500).json({
-                code: 500,
                 success: false,
                 message: error.message,
             });
         }
     }
 
-    // PUT /references/:id
+    // GET /jobs/:id/applications
+    async findByIdWithApplications(req, res) {
+        try {
+            const { id } = req.params;
+            const job = await jobService.findByIdWithApplications(id);
+
+            if (!job) {
+                return res.status(404).json({
+                    success: false,
+                    message: "Job not found",
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                data: job,
+            });
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+            });
+        }
+    }
+
+    // PUT /jobs/:id
     async update(req, res) {
         try {
             const { id } = req.params;
-            const reference = await referenceService.update(id, req.body);
+            const job = await jobService.update(id, req.body);
 
-            if (!reference) {
+            if (!job) {
                 return res.status(404).json({
                     success: false,
-                    message: "Reference not found",
+                    message: "Job not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                message: "Reference updated successfully",
-                data: reference,
+                message: "Job updated successfully",
+                data: job,
             });
         } catch (error) {
             return res.status(500).json({
@@ -105,27 +126,25 @@ class ReferenceController {
         }
     }
 
-    // DELETE /references/:id
+    // DELETE /jobs/:id
     async delete(req, res) {
         try {
             const { id } = req.params;
-            const deleted = await referenceService.delete(id);
+            const deleted = await jobService.delete(id);
 
             if (!deleted) {
                 return res.status(404).json({
                     success: false,
-                    message: "Reference not found",
+                    message: "Job not found",
                 });
             }
 
             return res.status(200).json({
-                code: 200,
                 success: true,
-                message: "Reference deleted successfully",
+                message: "Job deleted successfully",
             });
         } catch (error) {
             return res.status(500).json({
-                code: 500,
                 success: false,
                 message: error.message,
             });
@@ -133,4 +152,4 @@ class ReferenceController {
     }
 }
 
-export default new ReferenceController();
+export default new JobController();
